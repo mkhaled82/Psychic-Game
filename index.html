@@ -1,71 +1,72 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>The Psychic Game</title>
-  </head>
-  <body>
-    
-      <div id="game">
-        <h1> The Psychic Game </h1>
-        <h3> Guess what letter I'm thinking of </h3>
-        <div id="gameresults">
-          <p>wins: 0</p>
-          <p>losses: 0</p>
-          <p>Guesses left: 9</p>
-          <p>You have guessed: </p>
-        </div>
-      </div>
-  
-     <script type="text/javascript">
+<head>
+	<meta charset="UTF-8">
+	<title>The Psychic Game</title>
+</head>
 
-      var computerChoices = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
-  
+<body>
+	<div id="game">
+		<h1> The Psychic Game </h1>
+		<h3> Guess what letter I'm thinking of </h3>
+		<div id="gameresults">
+			<p>wins: 0</p>
+			<p>losses: 0</p>
+			<p>Guesses left: 9</p>
+			<p>You have guessed: </p>
+		</div>
+	</div>
+</body>
 
-      var wins = 0;
-      var losses = 0;
-      var guessesLeft = 9;
-      var userGuess = 0;
-      var guessArray =[];
-      
+<script type="text/javascript">
 
-      document.onkeyup = function(event){
-          var userGuess = event.key;
-          
-          var computerGuess = computerChoices[Math.floor(Math.random()
-          * computerChoices.length)];
-          
-          guessArray.push(userGuess);
+var computerChoices = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 
 
-          if (userGuess === computerGuess){
-            wins++;
-            guessesLeft = 9;
-          }
-          
-          else {
-            guessesLeft--;
-          }
+var wins = 0;
+var losses = 0;
+var guessesLeft = 9;
+var userGuess = 0;
+var guessArray =[];
 
-          if(guessesLeft===0){
-            losses++;
-            guessesLeft = 9;
-            guessArray=[];
-          }
+var computerGuess = generateGuess();
+console.log("Computer guess is " + computerGuess);
 
-          var guessedLetters= guessArray.toString();
-          var results = 
-         
-          "<p>wins:" + wins + "</p>"+
-          "<p>losses:" + losses + "</p>"+
-          "<p>Guesses left:" + guessesLeft + "</p>" +
-          "<p>You have guessed: " + guessedLetters + "</p>";
+function generateGuess(){
+	var randomLetter = computerChoices[Math.floor(Math.random() * computerChoices.length)];
+	return randomLetter;
+}
 
+document.onkeyup = function(event){
+	var userGuess = event.key;
+	guessArray.push(userGuess);
 
+	if (userGuess === computerGuess){ //&& (guessArray.indexOf(userGuess) > -1 ){
+		wins++;
+		guessesLeft = 9;
+		computerGuess = generateGuess();
+		console.log("user lost, new Computer guess is " + computerGuess);
+	}
+	else {
+		guessesLeft--;
+	}
 
-          document.querySelector("#gameresults").innerHTML = results;
-          
-          
-          }
+	if (guessesLeft===0){
+		losses++;
+		guessesLeft = 9;
+		guessArray=[];
+		computerGuess = generateGuess();
+		console.log("user won, new Computer guess is " + computerGuess);
+	}
+	else { }
 
-    </script>
+	var guessedLetters= guessArray.toString();
+	var results = 
+		"<p>wins:" + wins + "</p>"+
+		"<p>losses:" + losses + "</p>"+
+		"<p>Guesses left:" + guessesLeft + "</p>" +
+		"<p>You have guessed: " + guessedLetters + "</p>";
+
+	document.querySelector("#gameresults").innerHTML = results;
+}
+</script>
